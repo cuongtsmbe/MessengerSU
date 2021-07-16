@@ -1,0 +1,47 @@
+<script>
+    const id_room="{{id_room_server_send}}";//cách truyền biến server nodejs truyền cho handlebars vào js
+</script>
+//khi dùng peerjs call 
++ở phía browser người calling -> thì biến call sẽ chứa peer(id peer phía browser người nhận) lưu biến call này lại để thực hiện call.close() khi end cuộc gọi (save có thể dùng vd : valuePeerCall[call.peer]=call;-> close : valuePeerCall[call.peer].close())
++phía người nhận cuộc gọi sẽ chứa call (trong call có chứa peer id người calling)....(có thể lưu biến call lại để thực hiện end call )
++muốn end call 2 phía thì dùng socket gửi peerid qua phía đối phương và dùng valuePeerCall[peerid].close(); 
+
++trong socket thực chiến có thể dùng socket trong app.get,...
+var io=require("socket.io");
+app.io=io;
+app.get("/",(req,res,next)=>{
+    //dùng socket trong app bằng req vd: req.app.io("ABC").emit("nameevent",value);
+
+})
+
+
+ 
+ 
+ //controller stream trong video call 
+ socket.on("have_user_join_room", function(id_peer_newUser) {
+    getUserMedia({ video: true, audio: true }, function(stream) {       //////stream này đc truyền qua biến peer.call nên muốn tắt video hay audio gì thì thực hiện với stream này 
+        var call = peer.call(id_peer_newUser, stream); //1
+        showCamera("my_video_show");
+        var videoForDel, temp; //để lưu lại thẻ video để có thể xóa nếu call.close();
+        call_value = call;
+        peersClose[call.peer] = call; //call.peer là id peer mình gọi đến
+        All_stream_video_controll.push(stream);
+        call.on('stream', function(remoteStream) { //4 stream phía receiver trả về 
+            temp = addVideoFriendToDom("group_video_append", peer.id.substring(0, 12), remoteStream);
+            if (temp != 0) {
+                videoForDel = temp;
+            }
+            console.log("peer id call: ");
+            console.log(peer.id);
+            // All_stream_video_controll.push(remoteStream); //stream trong này chỉ để thêm vào DOM chứ trong thể thực hiện bật tắt video hay audio đc
+        });
+        call.on("close", function() {
+            if (videoForDel) {
+                videoForDel.remove();
+            }
+            alert("Có thành viên rời cuộc gọi.");
+        });
+    }, function(err) {
+        console.log('Failed to get local stream', err);
+    });
+});

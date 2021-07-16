@@ -1,0 +1,10 @@
+{
+    "mysql": {
+        "host": "localhost",
+        "user": "root",
+        "password": "",
+        "database": "chat62"
+    },
+    "hash": 8,
+    "max_file_upload": 12
+}

@@ -1,0 +1,8 @@
++hom nay phai xong project 
++cuoi ngay xem xong video thực chiến socket,(19h) r
++tỷ phú ẩn danh r
+
+
+
+
++thực hiện chức năng tắt/bật camera   r
